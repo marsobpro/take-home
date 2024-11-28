@@ -9,6 +9,8 @@ type CardProps = {
   onDelete: () => void;
   onRevert?: () => void;
   allowDelete?: boolean;
+  isExpanded: boolean;
+  onToggleExpand: () => void;
 };
 
 export const Card: FC<CardProps> = ({
@@ -17,13 +19,10 @@ export const Card: FC<CardProps> = ({
   onDelete,
   onRevert,
   allowDelete = true,
+  isExpanded = false,
+  onToggleExpand,
 }) => {
-  const [isExpanded, setIsExpanded] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
-
-  const handleToggleExpand = () => {
-    setIsExpanded(!isExpanded);
-  };
 
   const handleDelete = () => {
     setIsDeleting(true);
@@ -49,7 +48,7 @@ export const Card: FC<CardProps> = ({
         <h1 className="font-medium">{title}</h1>
         <div className="flex">
           {description && (
-            <ExpandButton onClick={handleToggleExpand}>
+            <ExpandButton onClick={onToggleExpand}>
               <ChevronDownIcon
                 className={`transform transition-transform duration-300 ${
                   isExpanded ? "rotate-180" : "rotate-0"

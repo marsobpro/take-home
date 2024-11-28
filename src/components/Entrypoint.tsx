@@ -6,11 +6,31 @@ import { Spinner } from "./Spinner";
 export const Entrypoint = () => {
   const [visibleCards, setVisibleCards] = useState<ListItem[]>([]);
   const [deletedCards, setDeletedCards] = useState<ListItem[]>([]);
+  const [expandedCards, setExpandedCards] = useState<number[]>([]);
   const [revealDeletedCards, setRevealDeletedCards] = useState(false);
   const listQuery = useGetListData();
 
   // TOOD
   // const deletedCards: DeletedListItem[] = [];
+
+  useEffect(() => {
+    const storedDeletedCards = JSON.parse(
+      localStorage.getItem("deletedCards") || "[]"
+    );
+    const storedExpandedCards = JSON.parse(
+      localStorage.getItem("expandedCards") || "[]"
+    );
+    setDeletedCards(storedDeletedCards);
+    setExpandedCards(storedExpandedCards);
+  }, []);
+
+  useEffect(() => {
+    localStorage.setItem("deletedCards", JSON.stringify(deletedCards));
+  }, [deletedCards]);
+
+  useEffect(() => {
+    localStorage.setItem("expandedCards", JSON.stringify(expandedCards));
+  }, [expandedCards]);
 
   useEffect(() => {
     if (listQuery.isLoading) {
@@ -32,6 +52,17 @@ export const Entrypoint = () => {
 
   const handleRevealDeletedCards = () => {
     setRevealDeletedCards(true);
+  };
+
+  const handleToggleExpandCard = (id: number) => {
+    setExpandedCards((prevExpandedCards) => {
+      const isExpanded = prevExpandedCards.includes(id);
+      if (isExpanded) {
+        return prevExpandedCards.filter((cardId) => cardId !== id);
+      } else {
+        return [...prevExpandedCards, id];
+      }
+    });
   };
 
   const handleRevertCard = (id: number) => {
@@ -61,6 +92,8 @@ export const Entrypoint = () => {
               title={card.title}
               description={card.description}
               onDelete={() => handleDeleteCard(card.id)}
+              isExpanded={expandedCards.includes(card.id)}
+              onToggleExpand={() => handleToggleExpandCard(card.id)}
             />
           ))}
         </div>
@@ -86,6 +119,8 @@ export const Entrypoint = () => {
                 description=""
                 onDelete={() => {}}
                 onRevert={() => handleRevertCard(card.id)}
+                isExpanded={expandedCards.includes(card.id)}
+                onToggleExpand={() => handleToggleExpandCard(card.id)}
                 allowDelete={false}
               />
             ))}
