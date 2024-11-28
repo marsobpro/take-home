@@ -26,6 +26,8 @@ I would focus primarily on:
 - No description scenario
 - Check animation state changes
 
+For testing I would use Jest
+
 ------------------------------------------
 
 ## Rules
