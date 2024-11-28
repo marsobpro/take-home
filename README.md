@@ -11,19 +11,20 @@ I moved most of the states to the Zustand Store, in order to have a single sourc
 I believe that testing is, of course, important.
 The main advantages I see are that they:
 
-Encourage thinking through component behaviors
-Serve as living documentation of expected functionality (probably even better than my comments ;) )
-Provide safety net when modifying code
-Catch errors early when cheaper to fix
+- Encourage thinking through component behaviors
+- Serve as living documentation of expected functionality (probably even better than my comments ;) )
+- Provide safety net when modifying code
+- Catch errors early when cheaper to fix
 
 I would focus primarily on:
-Verify title, description display
-Check button visibility conditions
-Card rendering with different prop combinations
-Expand/collapse functionality
-Delete and revert actions
-No description scenario
-Check animation state changes
+
+- Verify title, description display
+- Check button visibility conditions
+- Card rendering with different prop combinations
+- Expand/collapse functionality
+- Delete and revert actions
+- No description scenario
+- Check animation state changes
 
 ------------------------------------------
 
