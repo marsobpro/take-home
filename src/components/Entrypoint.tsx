@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetListData } from "../api/getListData";
 import { useStore } from "../store/store";
@@ -60,6 +60,49 @@ export const Entrypoint = () => {
     queryClient.invalidateQueries({ queryKey: ["list"] });
   };
 
+  // Visible Cards List
+
+  const visibleCardsList = useMemo(
+    () =>
+      visibleCards.map((card) => (
+        <Card
+          key={card.id}
+          title={card.title}
+          description={card.description}
+          onDelete={() => deleteCard(card.id)}
+          isExpanded={expandedCards.includes(card.id)}
+          onToggleExpand={() => toggleExpandCard(card.id)}
+        />
+      )),
+    [visibleCards, expandedCards, deleteCard, toggleExpandCard]
+  );
+
+  // Deleted Cards
+  const deletedCardsList = useMemo(
+    () =>
+      revealDeletedCards
+        ? deletedCards.map((card) => (
+            <Card
+              key={card.id}
+              title={card.title}
+              description=""
+              onDelete={() => {}}
+              onRevert={() => revertCard(card.id)}
+              isExpanded={expandedCards.includes(card.id)}
+              onToggleExpand={() => toggleExpandCard(card.id)}
+              allowDelete={false}
+            />
+          ))
+        : null,
+    [
+      deletedCards,
+      revealDeletedCards,
+      expandedCards,
+      revertCard,
+      toggleExpandCard,
+    ]
+  );
+
   // Loading
   if (listQuery.isLoading) {
     return (
@@ -77,16 +120,7 @@ export const Entrypoint = () => {
           My Awesome List ({visibleCards.length})
         </h2>
         <div className="flex flex-col gap-y-3 max-h-[80%] overflow-scroll">
-          {visibleCards.map((card) => (
-            <Card
-              key={card.id}
-              title={card.title}
-              description={card.description}
-              onDelete={() => deleteCard(card.id)}
-              isExpanded={expandedCards.includes(card.id)}
-              onToggleExpand={() => toggleExpandCard(card.id)}
-            />
-          ))}
+          {visibleCardsList}
         </div>
       </div>
 
@@ -116,19 +150,7 @@ export const Entrypoint = () => {
 
         {/* Deleted Cards list */}
         <div className="flex flex-col gap-y-3 max-h-[80%] overflow-scroll">
-          {revealDeletedCards &&
-            deletedCards.map((card) => (
-              <Card
-                key={card.id}
-                title={card.title}
-                description=""
-                onDelete={() => {}}
-                onRevert={() => revertCard(card.id)}
-                isExpanded={expandedCards.includes(card.id)}
-                onToggleExpand={() => toggleExpandCard(card.id)}
-                allowDelete={false}
-              />
-            ))}
+          {deletedCardsList}
         </div>
       </div>
     </div>
