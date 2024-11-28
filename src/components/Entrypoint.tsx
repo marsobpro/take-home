@@ -1,9 +1,11 @@
 import { useEffect, useState } from "react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useGetListData } from "../api/getListData";
+import { useStore } from "../store";
+
 import { Card } from "./List";
 import { Spinner } from "./Spinner";
-import { useStore } from "../store";
-import { useQueryClient } from "@tanstack/react-query";
+import { ToggleButton } from "./ToggleButton";
 
 export const Entrypoint = () => {
   const {
@@ -58,16 +60,18 @@ export const Entrypoint = () => {
     queryClient.invalidateQueries({ queryKey: ["list"] });
   };
 
+  // Loading
   if (listQuery.isLoading) {
     return <Spinner />;
   }
 
   return (
-    <div className="flex gap-x-16">
-      <div className="w-full max-w-xl">
-        <h1 className="mb-1 font-medium text-lg">
+    <div className="flex gap-x-16 w-[90%] justify-center">
+      {/* Awesome List */}
+      <div className="flex-1 max-w-xl">
+        <h2 className="mb-8 font-bold text-2xl">
           My Awesome List ({visibleCards.length})
-        </h1>
+        </h2>
         <div className="flex flex-col gap-y-3">
           {visibleCards.map((card) => (
             <Card
@@ -81,20 +85,24 @@ export const Entrypoint = () => {
           ))}
         </div>
       </div>
-      <div className="w-full max-w-xl">
-        <div className="flex items-center justify-between">
-          <h1 className="mb-1 font-medium text-lg">
+
+      {/* Deleted Cards */}
+      <div className="flex-1 max-w-xl">
+        <div className="flex items-center justify-between mb-8 ">
+          <h2 className="font-bold text-2xl">
             Deleted Cards ({deletedCards.length})
-          </h1>
-          <button
-            onClick={handleRevealDeletedCards}
-            className="text-white text-sm transition-colors hover:bg-gray-800 disabled:bg-black/75 bg-black rounded px-3 py-1"
-          >
-            Reveal
-          </button>
+          </h2>
+          <ToggleButton
+            isToggled={revealDeletedCards}
+            onToggle={() => setRevealDeletedCards(!revealDeletedCards)}
+            onLabel="Hide"
+            offLabel="Reveal"
+            disabled={deletedCards.length === 0}
+          />
+
           <button
             onClick={handleRefresh}
-            className="text-white text-sm transition-colors hover:bg-gray-800 disabled:bg-black/75 bg-black rounded px-3 py-1"
+            className="text-white text-sm transition-colors hover:bg-gray-800 disabled:bg-black/75 bg-black rounded px-3 py-1 hover:opacity-70 duration-150"
           >
             Refresh
           </button>
