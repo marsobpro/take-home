@@ -66,13 +66,13 @@ export const Entrypoint = () => {
   }
 
   return (
-    <div className="flex gap-x-16 w-[90%] justify-center align-top">
+    <div className="flex gap-x-16 w-[90%] h-full justify-center align-top">
       {/* Awesome List */}
-      <div className="flex-1 max-w-xl">
+      <div className="flex-1 max-w-xl ">
         <h2 className="mb-8 font-bold text-2xl">
           My Awesome List ({visibleCards.length})
         </h2>
-        <div className="flex flex-col gap-y-3">
+        <div className="flex flex-col gap-y-3 max-h-[80%] overflow-scroll">
           {visibleCards.map((card) => (
             <Card
               key={card.id}
@@ -86,7 +86,7 @@ export const Entrypoint = () => {
         </div>
       </div>
 
-      {/* Deleted Cards */}
+      {/* Deleted Cards / Reveal / Refresh header */}
       <div className="flex-1 max-w-xl">
         <div className="flex items-center justify-between mb-8 ">
           <h2 className="font-bold text-2xl">
@@ -103,13 +103,15 @@ export const Entrypoint = () => {
 
             <button
               onClick={handleRefresh}
-              className="text-white text-sm transition-colors hover:bg-gray-800 disabled:bg-black/75 bg-black rounded px-3 py-1 hover:opacity-70 duration-150"
+              className="text-white text-sm transition-colors hover:bg-gray-800 disabled:bg-black/75 bg-black rounded px-3 py-1 hover:opacity-70 duration-150 cursor-pointer"
             >
               Refresh
             </button>
           </div>
         </div>
-        <div className="flex flex-col gap-y-3">
+
+        {/* Deleted Cards list */}
+        <div className="flex flex-col gap-y-3 max-h-[80%] overflow-scroll">
           {revealDeletedCards &&
             deletedCards.map((card) => (
               <Card
