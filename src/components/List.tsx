@@ -7,9 +7,15 @@ type CardProps = {
   title: ListItem["title"];
   description: ListItem["description"];
   onDelete: () => void;
+  allowDelete?: boolean;
 };
 
-export const Card: FC<CardProps> = ({ title, description, onDelete }) => {
+export const Card: FC<CardProps> = ({
+  title,
+  description,
+  onDelete,
+  allowDelete = true,
+}) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
@@ -33,14 +39,16 @@ export const Card: FC<CardProps> = ({ title, description, onDelete }) => {
       <div className="flex justify-between mb-0.5">
         <h1 className="font-medium">{title}</h1>
         <div className="flex">
-          <ExpandButton onClick={handleToggleExpand}>
-            <ChevronDownIcon
-              className={`transform transition-transform duration-300 ${
-                isExpanded ? "rotate-180" : "rotate-0"
-              }`}
-            />
-          </ExpandButton>
-          <DeleteButton onClick={handleDelete} />
+          {description && (
+            <ExpandButton onClick={handleToggleExpand}>
+              <ChevronDownIcon
+                className={`transform transition-transform duration-300 ${
+                  isExpanded ? "rotate-180" : "rotate-0"
+                }`}
+              />
+            </ExpandButton>
+          )}
+          {allowDelete && <DeleteButton onClick={handleDelete} />}
         </div>
       </div>
       <div className={`card-content ${isExpanded ? "expanded" : ""}`}>

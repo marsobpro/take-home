@@ -6,6 +6,7 @@ import { Spinner } from "./Spinner";
 export const Entrypoint = () => {
   const [visibleCards, setVisibleCards] = useState<ListItem[]>([]);
   const [deletedCards, setDeletedCards] = useState<ListItem[]>([]);
+  const [revealDeletedCards, setRevealDeletedCards] = useState(false);
   const listQuery = useGetListData();
 
   // TOOD
@@ -27,6 +28,10 @@ export const Entrypoint = () => {
       setVisibleCards(updatedVisibleCards);
       setDeletedCards([...deletedCards, cardToDelete]);
     }
+  };
+
+  const handleRevealDeletedCards = () => {
+    setRevealDeletedCards(true);
   };
 
   if (listQuery.isLoading) {
@@ -56,16 +61,23 @@ export const Entrypoint = () => {
             Deleted Cards ({deletedCards.length})
           </h1>
           <button
-            disabled
+            onClick={handleRevealDeletedCards}
             className="text-white text-sm transition-colors hover:bg-gray-800 disabled:bg-black/75 bg-black rounded px-3 py-1"
           >
             Reveal
           </button>
         </div>
         <div className="flex flex-col gap-y-3">
-          {/* {deletedCards.map((card) => (
-            <Card key={card.id} card={card} />
-          ))} */}
+          {revealDeletedCards &&
+            deletedCards.map((card) => (
+              <Card
+                key={card.id}
+                title={card.title}
+                description=""
+                onDelete={() => {}}
+                allowDelete={false}
+              />
+            ))}
         </div>
       </div>
     </div>
