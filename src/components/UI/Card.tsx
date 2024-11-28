@@ -55,7 +55,9 @@ export const Card: FC<CardProps> = ({
   return (
     <div className={cardClassName}>
       <div className="flex justify-between mb-0.5">
-        <h1 className="font-medium">{title}</h1>
+        <h3 className="font-medium">{title}</h3>
+
+        {/* Action Buttons */}
         <div className="flex">
           {description && (
             <ExpandButton onClick={onToggleExpand}>
@@ -69,6 +71,8 @@ export const Card: FC<CardProps> = ({
           )}
         </div>
       </div>
+
+      {/* Description / Expanding part */}
       <div className={`card-content ${isExpanded ? "expanded" : ""}`}>
         <p className="text-sm">{description}</p>
       </div>
