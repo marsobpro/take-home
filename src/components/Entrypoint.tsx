@@ -1,18 +1,29 @@
 import { useEffect, useState } from "react";
-import { ListItem, useGetListData } from "../api/getListData";
+import { useGetListData } from "../api/getListData";
 import { Card } from "./List";
 import { Spinner } from "./Spinner";
+import { useStore } from "../store";
+import { useQueryClient } from "@tanstack/react-query";
 
 export const Entrypoint = () => {
-  const [visibleCards, setVisibleCards] = useState<ListItem[]>([]);
-  const [deletedCards, setDeletedCards] = useState<ListItem[]>([]);
-  const [expandedCards, setExpandedCards] = useState<number[]>([]);
+  const {
+    visibleCards,
+    deletedCards,
+    expandedCards,
+    setVisibleCards,
+    setDeletedCards,
+    setExpandedCards,
+    toggleExpandCard,
+  } = useStore();
+
+  // State
   const [revealDeletedCards, setRevealDeletedCards] = useState(false);
   const listQuery = useGetListData();
 
-  // TOOD
-  // const deletedCards: DeletedListItem[] = [];
+  // Consts
+  const queryClient = useQueryClient();
 
+  // Use Effects
   useEffect(() => {
     const storedDeletedCards = JSON.parse(
       localStorage.getItem("deletedCards") || "[]"
@@ -22,7 +33,7 @@ export const Entrypoint = () => {
     );
     setDeletedCards(storedDeletedCards);
     setExpandedCards(storedExpandedCards);
-  }, []);
+  }, [setDeletedCards, setExpandedCards]);
 
   useEffect(() => {
     localStorage.setItem("deletedCards", JSON.stringify(deletedCards));
@@ -38,8 +49,9 @@ export const Entrypoint = () => {
     }
 
     setVisibleCards(listQuery.data?.filter((item) => item.isVisible) ?? []);
-  }, [listQuery.data, listQuery.isLoading]);
+  }, [listQuery.data, listQuery.isLoading, setVisibleCards]);
 
+  // Handlers
   const handleDeleteCard = (id: number) => {
     const cardToDelete = visibleCards.find((item) => item.id === id);
 
@@ -54,17 +66,6 @@ export const Entrypoint = () => {
     setRevealDeletedCards(true);
   };
 
-  const handleToggleExpandCard = (id: number) => {
-    setExpandedCards((prevExpandedCards) => {
-      const isExpanded = prevExpandedCards.includes(id);
-      if (isExpanded) {
-        return prevExpandedCards.filter((cardId) => cardId !== id);
-      } else {
-        return [...prevExpandedCards, id];
-      }
-    });
-  };
-
   const handleRevertCard = (id: number) => {
     const cardToRevert = deletedCards.find((item) => item.id === id);
 
@@ -73,6 +74,10 @@ export const Entrypoint = () => {
       setDeletedCards(updatedDeletedCards);
       setVisibleCards([...visibleCards, cardToRevert]);
     }
+  };
+
+  const handleRefresh = () => {
+    queryClient.invalidateQueries({ queryKey: ["list"] });
   };
 
   if (listQuery.isLoading) {
@@ -93,7 +98,7 @@ export const Entrypoint = () => {
               description={card.description}
               onDelete={() => handleDeleteCard(card.id)}
               isExpanded={expandedCards.includes(card.id)}
-              onToggleExpand={() => handleToggleExpandCard(card.id)}
+              onToggleExpand={() => toggleExpandCard(card.id)}
             />
           ))}
         </div>
@@ -109,6 +114,12 @@ export const Entrypoint = () => {
           >
             Reveal
           </button>
+          <button
+            onClick={handleRefresh}
+            className="text-white text-sm transition-colors hover:bg-gray-800 disabled:bg-black/75 bg-black rounded px-3 py-1"
+          >
+            Refresh
+          </button>
         </div>
         <div className="flex flex-col gap-y-3">
           {revealDeletedCards &&
@@ -120,7 +131,7 @@ export const Entrypoint = () => {
                 onDelete={() => {}}
                 onRevert={() => handleRevertCard(card.id)}
                 isExpanded={expandedCards.includes(card.id)}
-                onToggleExpand={() => handleToggleExpandCard(card.id)}
+                onToggleExpand={() => toggleExpandCard(card.id)}
                 allowDelete={false}
               />
             ))}
