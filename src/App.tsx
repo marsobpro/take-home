@@ -8,7 +8,7 @@ const queryClient = new QueryClient();
 const App: React.FC = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <main className="flex h-screen items-start justify-center py-12">
+      <main className="flex h-screen items-start justify-center py-12 bg-gray-100">
         <Entrypoint />
       </main>
       <ReactQueryDevtools initialIsOpen={false} />
