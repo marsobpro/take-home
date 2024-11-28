@@ -24,17 +24,25 @@ export const Card: FC<CardProps> = ({
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleDelete = useCallback(() => {
-    setIsDeleting(true);
-    setTimeout(onDelete, 300);
-  }, [onDelete]);
+  const handleDelete = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation();
+      setIsDeleting(true);
+      setTimeout(onDelete, 300);
+    },
+    [onDelete]
+  );
 
-  const handleRevert = useCallback(() => {
-    setIsDeleting(true);
-    if (onRevert) {
-      setTimeout(onRevert, 300);
-    }
-  }, [onRevert]);
+  const handleRevert = useCallback(
+    (event: React.MouseEvent) => {
+      event.stopPropagation();
+      setIsDeleting(true);
+      if (onRevert) {
+        setTimeout(onRevert, 300);
+      }
+    },
+    [onRevert]
+  );
 
   const iconClassName = useMemo(
     () =>
@@ -47,20 +55,20 @@ export const Card: FC<CardProps> = ({
   const cardClassName = useMemo(
     () =>
       `border border-black rounded-md px-2 py-1.5 
-    transition-all duration-300 
+    transition-all duration-300 cursor-pointer
     ${isDeleting ? "opacity-0 scale-95" : "opacity-100 scale-100"}`,
     [isDeleting]
   );
 
   return (
-    <div className={cardClassName}>
+    <div className={cardClassName} onClick={onToggleExpand}>
       <div className="flex justify-between mb-0.5">
         <h3 className="font-medium">{title}</h3>
 
         {/* Action Buttons */}
         <div className="flex">
           {description && (
-            <ExpandButton onClick={onToggleExpand}>
+            <ExpandButton>
               <ChevronDownIcon className={iconClassName} />
             </ExpandButton>
           )}
