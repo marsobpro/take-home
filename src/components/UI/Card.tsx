@@ -1,5 +1,5 @@
 import { FC, useState } from "react";
-import { ListItem } from "../api/getListData";
+import { ListItem } from "../../api/getListData";
 import { DeleteButton, ExpandButton } from "./Buttons";
 import { ChevronDownIcon } from "./icons";
 

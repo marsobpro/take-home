@@ -3,9 +3,9 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useGetListData } from "../api/getListData";
 import { useStore } from "../store/store";
 
-import { Card } from "./Card";
-import { Spinner } from "./Spinner";
-import { ToggleButton } from "./ToggleButton";
+import { Card } from "./UI/Card";
+import { Spinner } from "./UI/Spinner";
+import { ToggleButton } from "./UI/ToggleButton";
 
 export const Entrypoint = () => {
   const {
