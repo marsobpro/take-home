@@ -66,7 +66,7 @@ export const Entrypoint = () => {
   }
 
   return (
-    <div className="flex gap-x-16 w-[90%] justify-center">
+    <div className="flex gap-x-16 w-[90%] justify-center align-top">
       {/* Awesome List */}
       <div className="flex-1 max-w-xl">
         <h2 className="mb-8 font-bold text-2xl">
@@ -92,20 +92,22 @@ export const Entrypoint = () => {
           <h2 className="font-bold text-2xl">
             Deleted Cards ({deletedCards.length})
           </h2>
-          <ToggleButton
-            isToggled={revealDeletedCards}
-            onToggle={() => setRevealDeletedCards(!revealDeletedCards)}
-            onLabel="Hide"
-            offLabel="Reveal"
-            disabled={deletedCards.length === 0}
-          />
+          <div className="flex gap-4 ml-auto">
+            <ToggleButton
+              isToggled={revealDeletedCards}
+              onToggle={() => setRevealDeletedCards(!revealDeletedCards)}
+              onLabel="Hide"
+              offLabel="Reveal"
+              disabled={deletedCards.length === 0}
+            />
 
-          <button
-            onClick={handleRefresh}
-            className="text-white text-sm transition-colors hover:bg-gray-800 disabled:bg-black/75 bg-black rounded px-3 py-1 hover:opacity-70 duration-150"
-          >
-            Refresh
-          </button>
+            <button
+              onClick={handleRefresh}
+              className="text-white text-sm transition-colors hover:bg-gray-800 disabled:bg-black/75 bg-black rounded px-3 py-1 hover:opacity-70 duration-150"
+            >
+              Refresh
+            </button>
+          </div>
         </div>
         <div className="flex flex-col gap-y-3">
           {revealDeletedCards &&
