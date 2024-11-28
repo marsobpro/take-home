@@ -56,7 +56,6 @@ export const Card: FC<CardProps> = ({
     () =>
       `border border-gray-300 rounded-md px-2 py-1.5 
     transition-all duration-400 cursor-pointer hover:border-gray-700
-    transition-colors duration-150
     ${isDeleting ? "opacity-0 scale-95" : "opacity-100 scale-100"}`,
     [isDeleting]
   );
