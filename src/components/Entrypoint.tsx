@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetListData } from "../api/getListData";
-import { useStore } from "../store";
+import { useStore } from "../store/store";
 
 import { Card } from "./Card";
 import { Spinner } from "./Spinner";
@@ -61,7 +61,7 @@ export const Entrypoint = () => {
   };
 
   // Loading
-  if (!listQuery.isLoading) {
+  if (listQuery.isLoading) {
     return (
       <div className="relative top-1/2 -translate-y-1/2">
         <Spinner />
