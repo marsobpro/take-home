@@ -1,4 +1,4 @@
-## Approach: 
+## Approach
 
 As for my approach, I always try to comment the code quite well - I believe that a lack of comments does more harm than an excess.
 In components, I like to simplify the return as much as possible, moving as much logic as possible to separate variables / components.
