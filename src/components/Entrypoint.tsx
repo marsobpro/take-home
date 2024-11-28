@@ -3,7 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useGetListData } from "../api/getListData";
 import { useStore } from "../store";
 
-import { Card } from "./List";
+import { Card } from "./Card";
 import { Spinner } from "./Spinner";
 import { ToggleButton } from "./ToggleButton";
 
@@ -61,8 +61,12 @@ export const Entrypoint = () => {
   };
 
   // Loading
-  if (listQuery.isLoading) {
-    return <Spinner />;
+  if (!listQuery.isLoading) {
+    return (
+      <div className="relative top-1/2 -translate-y-1/2">
+        <Spinner />
+      </div>
+    );
   }
 
   return (

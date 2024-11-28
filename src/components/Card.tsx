@@ -39,7 +39,7 @@ export const Card: FC<CardProps> = ({
   return (
     <div
       className={`
-      border border-black px-2 py-1.5 
+      border border-black rounded-md px-2 py-1.5 
       transition-all duration-300 
       ${isDeleting ? "opacity-0 scale-95" : "opacity-100 scale-100"}
     `}
