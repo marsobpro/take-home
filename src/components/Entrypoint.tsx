@@ -34,6 +34,16 @@ export const Entrypoint = () => {
     setRevealDeletedCards(true);
   };
 
+  const handleRevertCard = (id: number) => {
+    const cardToRevert = deletedCards.find((item) => item.id === id);
+
+    if (cardToRevert) {
+      const updatedDeletedCards = deletedCards.filter((item) => item.id !== id);
+      setDeletedCards(updatedDeletedCards);
+      setVisibleCards([...visibleCards, cardToRevert]);
+    }
+  };
+
   if (listQuery.isLoading) {
     return <Spinner />;
   }
@@ -75,6 +85,7 @@ export const Entrypoint = () => {
                 title={card.title}
                 description=""
                 onDelete={() => {}}
+                onRevert={() => handleRevertCard(card.id)}
                 allowDelete={false}
               />
             ))}

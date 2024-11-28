@@ -7,6 +7,7 @@ type CardProps = {
   title: ListItem["title"];
   description: ListItem["description"];
   onDelete: () => void;
+  onRevert?: () => void;
   allowDelete?: boolean;
 };
 
@@ -14,6 +15,7 @@ export const Card: FC<CardProps> = ({
   title,
   description,
   onDelete,
+  onRevert,
   allowDelete = true,
 }) => {
   const [isExpanded, setIsExpanded] = useState(false);
@@ -26,6 +28,13 @@ export const Card: FC<CardProps> = ({
   const handleDelete = () => {
     setIsDeleting(true);
     setTimeout(onDelete, 300);
+  };
+
+  const handleRevert = () => {
+    setIsDeleting(true);
+    if (onRevert) {
+      setTimeout(onRevert, 300);
+    }
   };
 
   return (
@@ -48,7 +57,11 @@ export const Card: FC<CardProps> = ({
               />
             </ExpandButton>
           )}
-          {allowDelete && <DeleteButton onClick={handleDelete} />}
+          {allowDelete ? (
+            <DeleteButton onClick={handleDelete} />
+          ) : (
+            <DeleteButton onClick={handleRevert} />
+          )}
         </div>
       </div>
       <div className={`card-content ${isExpanded ? "expanded" : ""}`}>
