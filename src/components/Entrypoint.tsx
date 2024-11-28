@@ -5,6 +5,7 @@ import { Spinner } from "./Spinner";
 
 export const Entrypoint = () => {
   const [visibleCards, setVisibleCards] = useState<ListItem[]>([]);
+  const [deletedCards, setDeletedCards] = useState<ListItem[]>([]);
   const listQuery = useGetListData();
 
   // TOOD
@@ -18,6 +19,16 @@ export const Entrypoint = () => {
     setVisibleCards(listQuery.data?.filter((item) => item.isVisible) ?? []);
   }, [listQuery.data, listQuery.isLoading]);
 
+  const handleDeleteCard = (id: number) => {
+    const cardToDelete = visibleCards.find((item) => item.id === id);
+
+    if (cardToDelete) {
+      const updatedVisibleCards = visibleCards.filter((item) => item.id !== id);
+      setVisibleCards(updatedVisibleCards);
+      setDeletedCards([...deletedCards, cardToDelete]);
+    }
+  };
+
   if (listQuery.isLoading) {
     return <Spinner />;
   }
@@ -25,16 +36,25 @@ export const Entrypoint = () => {
   return (
     <div className="flex gap-x-16">
       <div className="w-full max-w-xl">
-        <h1 className="mb-1 font-medium text-lg">My Awesome List ({visibleCards.length})</h1>
+        <h1 className="mb-1 font-medium text-lg">
+          My Awesome List ({visibleCards.length})
+        </h1>
         <div className="flex flex-col gap-y-3">
           {visibleCards.map((card) => (
-            <Card key={card.id} title={card.title} description={card.description} />
+            <Card
+              key={card.id}
+              title={card.title}
+              description={card.description}
+              onDelete={() => handleDeleteCard(card.id)}
+            />
           ))}
         </div>
       </div>
       <div className="w-full max-w-xl">
         <div className="flex items-center justify-between">
-          <h1 className="mb-1 font-medium text-lg">Deleted Cards (0)</h1>
+          <h1 className="mb-1 font-medium text-lg">
+            Deleted Cards ({deletedCards.length})
+          </h1>
           <button
             disabled
             className="text-white text-sm transition-colors hover:bg-gray-800 disabled:bg-black/75 bg-black rounded px-3 py-1"
