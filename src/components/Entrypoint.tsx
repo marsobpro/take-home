@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetListData } from "../api/getListData";
 import { useStore } from "../store/store";
@@ -56,9 +56,13 @@ export const Entrypoint = () => {
   }, [listQuery.data, listQuery.isLoading, setVisibleCards]);
 
   // Handlers
-  const handleRefresh = () => {
+  const handleRefresh = useCallback(() => {
     queryClient.invalidateQueries({ queryKey: ["list"] });
-  };
+  }, [queryClient]);
+
+  const handleToggleDeletedCards = useCallback(() => {
+    setRevealDeletedCards((prev) => !prev);
+  }, []);
 
   // Visible Cards List
 
@@ -133,7 +137,7 @@ export const Entrypoint = () => {
           <div className="flex gap-4 ml-auto">
             <ToggleButton
               isToggled={revealDeletedCards}
-              onToggle={() => setRevealDeletedCards(!revealDeletedCards)}
+              onToggle={handleToggleDeletedCards}
               onLabel="Hide"
               offLabel="Reveal"
               disabled={deletedCards.length === 0}
