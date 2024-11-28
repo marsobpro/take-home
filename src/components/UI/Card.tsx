@@ -1,4 +1,4 @@
-import { FC, useState } from "react";
+import { FC, useCallback, useState } from "react";
 import { ListItem } from "../../api/getListData";
 import { DeleteButton, ExpandButton } from "./Buttons";
 import { ChevronDownIcon } from "./icons";
@@ -24,17 +24,17 @@ export const Card: FC<CardProps> = ({
 }) => {
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const handleDelete = () => {
+  const handleDelete = useCallback(() => {
     setIsDeleting(true);
     setTimeout(onDelete, 300);
-  };
+  }, [onDelete]);
 
-  const handleRevert = () => {
+  const handleRevert = useCallback(() => {
     setIsDeleting(true);
     if (onRevert) {
       setTimeout(onRevert, 300);
     }
-  };
+  }, [onRevert]);
 
   return (
     <div

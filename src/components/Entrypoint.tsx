@@ -65,7 +65,6 @@ export const Entrypoint = () => {
   }, []);
 
   // Visible Cards List
-
   const visibleCardsList = useMemo(
     () =>
       visibleCards.map((card) => (
