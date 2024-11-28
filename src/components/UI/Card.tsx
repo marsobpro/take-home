@@ -1,4 +1,4 @@
-import { FC, useCallback, useState } from "react";
+import { FC, useCallback, useMemo, useState } from "react";
 import { ListItem } from "../../api/getListData";
 import { DeleteButton, ExpandButton } from "./Buttons";
 import { ChevronDownIcon } from "./icons";
@@ -36,24 +36,30 @@ export const Card: FC<CardProps> = ({
     }
   }, [onRevert]);
 
+  const iconClassName = useMemo(
+    () =>
+      `transform transition-transform duration-300 ${
+        isExpanded ? "rotate-180" : "rotate-0"
+      }`,
+    [isExpanded]
+  );
+
+  const cardClassName = useMemo(
+    () =>
+      `border border-black rounded-md px-2 py-1.5 
+    transition-all duration-300 
+    ${isDeleting ? "opacity-0 scale-95" : "opacity-100 scale-100"}`,
+    [isDeleting]
+  );
+
   return (
-    <div
-      className={`
-      border border-black rounded-md px-2 py-1.5 
-      transition-all duration-300 
-      ${isDeleting ? "opacity-0 scale-95" : "opacity-100 scale-100"}
-    `}
-    >
+    <div className={cardClassName}>
       <div className="flex justify-between mb-0.5">
         <h1 className="font-medium">{title}</h1>
         <div className="flex">
           {description && (
             <ExpandButton onClick={onToggleExpand}>
-              <ChevronDownIcon
-                className={`transform transition-transform duration-300 ${
-                  isExpanded ? "rotate-180" : "rotate-0"
-                }`}
-              />
+              <ChevronDownIcon className={iconClassName} />
             </ExpandButton>
           )}
           {allowDelete ? (
